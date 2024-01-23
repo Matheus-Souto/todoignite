@@ -3,26 +3,70 @@ import { styles } from "./styles";
 import { Counter } from "../../components/Counter";
 import { Task } from "../../components/Task";
 import { useState } from "react";
+import { Empty } from "../../components/Empty";
 
 
 export default function Home() {
-    const [tasks, setTasks] = useState<string[]>([])
-    const [taskName, setTaskname] = useState("")
+    type Task = {
+        id: number;
+        taskName: string;
+        isCompleted: boolean;
+    }
 
-    // criar função para adicionar um novo task
+    const [tasks, setTasks] = useState<Task[]>([])
+    const [taskName, setTaskname] = useState("")
+    const [isCompleted, setIsCompleted] = useState(false)
+    const [completedCount, setCompletedCount] = useState(0)
+
     const handleAddTask = () => {
         if (taskName.length === 0) {
             return Alert.alert("Atenção", "Por favor, insira um nome para a tarefa!")
         }
-        setTasks(prevState => [...prevState, taskName])
+        setTasks((prevState) => [...prevState, 
+            { id: Math.random(), 
+              taskName, 
+              isCompleted }
+        ]);
         setTaskname("")
+        console.log(tasks)
     }
 
-    // criar função para remover um task
     const handleRemoveTask = (index: number) => {
-        setTasks(prevState => prevState.filter((_, i) => i!== index))
+        Alert.alert(
+            "Atenção",
+            "Tem certeza que quer remover a tarefa?",
+            [
+                {
+                    text: "Não",
+                    onPress: () => {},
+                    style: "cancel"
+                },
+                {
+                    text: "Sim",
+                    onPress: () => {
+                        setTasks((prevState) => prevState.filter((_, i) => i!== index));
+                    }
+                }
+            ]
+        )
     }
+
+    const handleToggleCompleted = (index: number) => {
+        setTasks((prevState) => {
+            const updatedTasks = prevState.map((task, i) =>
+                i === index ? { ...task, isCompleted: !task.isCompleted } : task
+            );
     
+            const completedTasksCount = updatedTasks.filter((task) => task.isCompleted).length;
+            
+            setCompletedCount((prevCompletedCount) => {
+                const countDifference = completedTasksCount - prevCompletedCount;
+                return prevCompletedCount + countDifference;
+            });
+            
+            return updatedTasks;
+        });
+    };
 
     return (
         <View style={styles.container}>
@@ -50,22 +94,24 @@ export default function Home() {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.counterContainer}>
-                        <Counter text="Criadas" color="#4EA8DE" counter={0} />
-                        <Counter text="Concluídas" color="#8284FA" counter={0} />
+                        <Counter text="Criadas" color="#4EA8DE" counter={tasks.length} />
+                        <Counter text="Concluídas" color="#8284FA" counter={completedCount} />
                     </View>
-                    {/* <View style={styles.divider} /> */}
                     <FlatList
                         data={tasks}
-                        keyExtractor={ (index)  => index }
                         renderItem={({ item, index }) => (
                             <Task
-                                key={index} 
-                                text={item}
+                                key={item.id} 
+                                text={item.taskName}
                                 onPress={() => handleRemoveTask(index)}
                                 index={index}
+                                onChecked={() => handleToggleCompleted(index)}
                             />
                         )}
-                    />   
+                        ListEmptyComponent={() => (
+                            <Empty />
+                        )}
+                    />
                 </View>
             </View>
         </View>

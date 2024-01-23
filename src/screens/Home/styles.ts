@@ -60,9 +60,4 @@ export const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 20
     },
-    // divider: {
-    //     borderBottomWidth: 2,
-    //     borderBottomColor: "#3F3F3F",
-    //     marginVertical: 25,
-    // }
 })

@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
         
     },
     task: {
+        height: 75,
         padding: 12,
         backgroundColor: "#262626",
         elevation: 1,
@@ -21,6 +22,7 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        marginBottom: 10
     },
     checkboxBase: {
         width: 20,
@@ -47,4 +49,8 @@ export const styles = StyleSheet.create({
         color: "#F2F2F2",
         lineHeight: 24,
     },
+    completedText: {
+        textDecorationLine: 'line-through',
+        color: '#808080'
+    }
 })

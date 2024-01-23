@@ -4,12 +4,13 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useState } from "react";
 
 type Props = {
-    text: string;
+    text: string | any;
     onPress: (index: number) => void;
+    onChecked: (index: number) => void;
     index: number;
 }
 
-export function Task({text, onPress, index}: Props) {
+export function Task({text, onPress, onChecked, index}: Props) {
     const [checked, setChecked] = useState(false)
 
     return (
@@ -17,10 +18,13 @@ export function Task({text, onPress, index}: Props) {
             <View style={styles.task}>
                 <Pressable 
                 style={[styles.checkboxBase, checked && styles.checkboxChecked]}
-                onPress={() => setChecked(!checked)}>
+                onPress={() => {
+                    setChecked(!checked)
+                    onChecked(index);
+                }}>
                     {checked && <FontAwesome name="check" size={15} color="#F2F2F2" />}
                 </Pressable>
-                <Text style={styles.taskText}>{text}</Text>
+                <Text style={[styles.taskText, checked && styles.completedText]}>{text}</Text>
                 <TouchableOpacity
                     onPress={(event) => onPress(index)}
                 >
