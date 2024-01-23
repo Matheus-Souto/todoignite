@@ -28,6 +28,17 @@ export const styles = StyleSheet.create({
         borderRadius: 12,
         borderWidth: 2,
         borderColor: "#4EA8DE",
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "transparent",
+    },
+    checkboxChecked: {
+        backgroundColor: "#5E60CE",
+        borderColor: "#5E60CE",
+        justifyContent: "center",
+        alignItems: "center",
+        width: 20,
+        height: 20,
     },
     taskText: {
         maxWidth: 250,
